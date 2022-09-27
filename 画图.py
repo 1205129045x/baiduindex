@@ -19,14 +19,18 @@ data_df=pd.read_csv('月度数据.csv',encoding='gbk')
 data_df['date'] = [datetime.strptime(d, "%Y-%m") for d in data_df['date']]
 # data_df['date'] = pd.to_datetime(data_df.date, format='%Y/%m/%d') 
 # data_df['date'] = data_df['date'].dt.strftime('%Y-%m-%d')
-fig, ax = plt.subplots(1,1)
+fig, ax = plt.subplots(1,1,constrained_layout=True)
 # ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
 
 # plt.xticks(rotation=90)
+import math
+data_df['log_index'] = [math.log(i,10) for i in data_df['index']]
 
 
 # sns.lineplot(data=data_df, x='date', y='index', hue='keyword',style="keyword")
-sns.lineplot(x='date',y='index',hue='keyword',data=data_df)
+ax.plot(data_df['date'],data_df['log_index'] , "o",color="k", markerfacecolor="w") 
+sns.lineplot(x='date',y='log_index',hue='keyword',data=data_df)
+
 ax.xaxis.set_major_locator(mdates.MonthLocator(interval=2))
 # ax.xaxis.set_major_locator(ticker.MultipleLocator(2))
 ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
